@@ -1,0 +1,2 @@
+extensions:
+	httpClient: OriNette\HttpClient\DI\HttpClientExtension

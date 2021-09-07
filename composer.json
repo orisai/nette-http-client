@@ -1,0 +1,58 @@
+{
+	"name": "orisai/nette-http-client",
+	"description": "PSR-17 and PSR-18 HTTP client integration for Nette (based on symfony/http-client)",
+	"keywords": [
+		"client",
+		"http",
+		"nette",
+		"orisai",
+		"psr-7",
+		"psr-17",
+		"psr-18"
+	],
+	"type": "library",
+	"license": "MPL-2.0",
+	"homepage": "https://github.com/orisai/nette-http-client",
+	"authors": [
+		{
+			"name": "Marek Bartoš",
+			"homepage": "https://github.com/mabar"
+		}
+	],
+	"require": {
+		"php": ">=7.4.0 <8.2.0",
+		"nyholm/psr7": "^1.4.0",
+		"psr/http-client": "^1.0.0",
+		"psr/http-factory": "^1.0.0",
+		"symfony/http-client": "^5.3.0"
+	},
+	"require-dev": {
+		"brianium/paratest": "^6.3.0",
+		"infection/infection": "^0.25.0",
+		"orisai/coding-standard": "^2.0.0",
+		"orisai/nette-di": "^1.0.0",
+		"phpstan/extension-installer": "^1.0.0",
+		"phpstan/phpstan": "^0.12.0",
+		"phpstan/phpstan-deprecation-rules": "^0.12.0",
+		"phpstan/phpstan-nette": "^0.12.0",
+		"phpstan/phpstan-phpunit": "^0.12.0",
+		"phpstan/phpstan-strict-rules": "^0.12.0",
+		"phpunit/phpunit": "^9.3.0",
+		"staabm/annotate-pull-request-from-checkstyle": "^1.1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"OriNette\\HttpClient\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\OriNette\\HttpClient\\": "tests"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true
+	}
+}
