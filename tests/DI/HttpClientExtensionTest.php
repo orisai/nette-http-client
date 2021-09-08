@@ -42,7 +42,7 @@ final class HttpClientExtensionTest extends TestCase
 
 	public function testFactoryWiring(): void
 	{
-		$configurator = new ManualConfigurator(dirname(__DIR__, 3));
+		$configurator = new ManualConfigurator(dirname(__DIR__, 2));
 		$configurator->setDebugMode(true);
 
 		$configurator->addConfig(__DIR__ . '/wiring.neon');
