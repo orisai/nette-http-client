@@ -52,23 +52,30 @@ final class HttpClientExtensionTest extends TestCase
 		$factory = $container->getService('httpClient.nyholm.psr17Factory');
 		self::assertInstanceOf(Psr17Factory::class, $factory);
 
-		self::assertSame($factory, $container->getService('httpClient.requestFactory'));
-		self::assertSame($factory, $container->getByType(RequestFactoryInterface::class));
-
-		self::assertSame($factory, $container->getService('httpClient.responseFactory'));
-		self::assertSame($factory, $container->getByType(ResponseFactoryInterface::class));
-
-		self::assertSame($factory, $container->getService('httpClient.serverRequestFactory'));
-		self::assertSame($factory, $container->getByType(ServerRequestFactoryInterface::class));
-
-		self::assertSame($factory, $container->getService('httpClient.streamFactory'));
-		self::assertSame($factory, $container->getByType(StreamFactoryInterface::class));
-
-		self::assertSame($factory, $container->getService('httpClient.uploadedFileFactory'));
-		self::assertSame($factory, $container->getByType(UploadedFileFactoryInterface::class));
-
-		self::assertSame($factory, $container->getService('httpClient.uriFactory'));
-		self::assertSame($factory, $container->getByType(UriFactoryInterface::class));
+		self::assertInstanceOf(
+			RequestFactoryInterface::class,
+			$container->getByType(RequestFactoryInterface::class),
+		);
+		self::assertInstanceOf(
+			ResponseFactoryInterface::class,
+			$container->getByType(ResponseFactoryInterface::class),
+		);
+		self::assertInstanceOf(
+			ServerRequestFactoryInterface::class,
+			$container->getByType(ServerRequestFactoryInterface::class),
+		);
+		self::assertInstanceOf(
+			StreamFactoryInterface::class,
+			$container->getByType(StreamFactoryInterface::class),
+		);
+		self::assertInstanceOf(
+			UploadedFileFactoryInterface::class,
+			$container->getByType(UploadedFileFactoryInterface::class),
+		);
+		self::assertInstanceOf(
+			UriFactoryInterface::class,
+			$container->getByType(UriFactoryInterface::class),
+		);
 	}
 
 }

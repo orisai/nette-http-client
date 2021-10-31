@@ -42,7 +42,7 @@ final class HttpClientExtension extends CompilerExtension
 
 	private function registerPsr17Factory(ContainerBuilder $builder): ServiceDefinition
 	{
-		$definition = $builder->addDefinition($name = $this->prefix('nyholm.psr17Factory'))
+		return $builder->addDefinition($this->prefix('nyholm.psr17Factory'))
 			->setFactory(Psr17Factory::class)
 			->setAutowired([
 				RequestFactoryInterface::class,
@@ -52,20 +52,6 @@ final class HttpClientExtension extends CompilerExtension
 				UploadedFileFactoryInterface::class,
 				UriFactoryInterface::class,
 			]);
-
-		foreach (
-			[
-				'requestFactory',
-				'responseFactory',
-				'serverRequestFactory',
-				'streamFactory',
-				'uploadedFileFactory',
-				'uriFactory',
-			] as $alias) {
-			$builder->addAlias($this->prefix($alias), $name);
-		}
-
-		return $definition;
 	}
 
 	private function registerPsr18Client(ServiceDefinition $psr17FactoryDefinition, ContainerBuilder $builder): void
