@@ -1,0 +1,31 @@
+<?php declare(strict_types = 1);
+
+use OriNette\HttpClient\MonitoredRequest;
+
+/** @var array<MonitoredRequest> $requests */
+?>
+<h1>HTTP requests</h1>
+
+<div class="tracy-inner">
+	<table>
+		<tr>
+			<td>Method</td>
+			<td>Url</td>
+			<td>Options</td>
+			<td>Code</td>
+			<td>Headers</td>
+			<td>Info</td>
+		</tr>
+		<?php foreach ($requests as $request): ?>
+			<?php $response = $request->getResponse(); ?>
+			<tr>
+				<td><?= $request->getMethod() ?></td>
+				<td><?= $request->getUrl() ?></td>
+				<td><?php dump($request->getOptions()) ?></td>
+				<td><?= $response->getStatusCode() ?></td>
+				<td><?php dump($response->getHeaders()) ?></td>
+				<td><?php dump($response->getInfo()) ?></td>
+			</tr>
+		<?php endforeach; ?>>
+	</table>
+</div>
