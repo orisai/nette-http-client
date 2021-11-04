@@ -52,7 +52,7 @@ final class HttpClientExtension extends CompilerExtension
 
 	private function registerFactory(ContainerBuilder $builder): ServiceDefinition
 	{
-		return $builder->addDefinition($this->prefix('nyholm.psr17Factory'))
+		return $builder->addDefinition($this->prefix('factory'))
 			->setFactory(Psr17Factory::class)
 			->setAutowired([
 				RequestFactoryInterface::class,

@@ -28,14 +28,14 @@ final class HttpClientExtensionTest extends TestCase
 
 		$container = $configurator->createContainer();
 
-		self::assertFalse($container->isCreated('httpClient.nyholm.psr17Factory'));
+		self::assertFalse($container->isCreated('httpClient.factory'));
 		self::assertFalse($container->isCreated('httpClient.symfony.client'));
 
 		$client = $container->getByType(ClientInterface::class);
 		self::assertInstanceOf(Psr18Client::class, $client);
 		self::assertSame($client, $container->getService('httpClient.client'));
 
-		self::assertTrue($container->isCreated('httpClient.nyholm.psr17Factory'));
+		self::assertTrue($container->isCreated('httpClient.factory'));
 		self::assertTrue($container->isCreated('httpClient.symfony.client'));
 		self::assertInstanceOf(HttpClientInterface::class, $container->getService('httpClient.symfony.client'));
 	}
@@ -49,7 +49,7 @@ final class HttpClientExtensionTest extends TestCase
 
 		$container = $configurator->createContainer();
 
-		$factory = $container->getService('httpClient.nyholm.psr17Factory');
+		$factory = $container->getService('httpClient.factory');
 		self::assertInstanceOf(Psr17Factory::class, $factory);
 
 		self::assertInstanceOf(
