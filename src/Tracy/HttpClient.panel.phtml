@@ -23,7 +23,7 @@ use OriNette\HttpClient\MonitoredRequest;
 				<td><?= $request->getUrl() ?></td>
 				<td><?php dump($request->getOptions()) ?></td>
 				<td><?= $response->getStatusCode() ?></td>
-				<td><?php dump($response->getHeaders()) ?></td>
+				<td><?php dump($response->getHeaders(false)) ?></td>
 				<td><?php dump($response->getInfo()) ?></td>
 			</tr>
 		<?php endforeach; ?>>
