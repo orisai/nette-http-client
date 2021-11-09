@@ -36,6 +36,12 @@ final class HttpClientExtension extends CompilerExtension
 			'debug' => Expect::structure([
 				'panel' => Expect::bool(false),
 			]),
+			'tls' => Expect::structure([
+				// verify_host
+				'verifyHost' => Expect::bool(true),
+				// verify_peer
+				'verifyPeer' => Expect::bool(true),
+			]),
 		]);
 	}
 
@@ -71,7 +77,15 @@ final class HttpClientExtension extends CompilerExtension
 	): void
 	{
 		$symfonyClientDefinition = $builder->addDefinition($this->prefix('symfony.client'))
-			->setFactory(HttpClient::class . '::create')
+			->setFactory(
+				HttpClient::class . '::create',
+				[
+					[
+						'verify_host' => $config->tls->verifyHost,
+						'verify_peer' => $config->tls->verifyPeer,
+					],
+				],
+			)
 			->setAutowired(false);
 
 		if ($config->debug->panel) {

@@ -8,6 +8,7 @@ for [Nette](https://nette.org) (based on [symfony/http-client](https://symfony.c
 - [Setup](#setup)
 - [Usage](#usage)
 - [Tracy](#tracy)
+- [TLS](#tls)
 
 ## Setup
 
@@ -105,4 +106,19 @@ To show requests and responses in Tracy panel, enable `debug > panel` option.
 httpClient:
 	debug:
 		panel: %debugMode%
+```
+
+## TLS
+
+```neon
+httpClient:
+
+	tls:
+		# bool
+		# Default: true
+		verifyPeer: true
+
+		# bool
+		# Default: true
+		verifyHost: true
 ```
