@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\OriNette\HttpClient\DI;
+namespace Tests\OriNette\HttpClient\Unit\DI;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use OriNette\DI\Boot\ManualConfigurator;
@@ -15,14 +15,28 @@ use Psr\Http\Message\UriFactoryInterface;
 use Symfony\Component\HttpClient\Psr18Client;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use function dirname;
+use function mkdir;
+use const PHP_VERSION_ID;
 
 final class HttpClientExtensionTest extends TestCase
 {
 
+	private string $rootDir;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		$this->rootDir = dirname(__DIR__, 3);
+		if (PHP_VERSION_ID < 81_000) {
+			@mkdir("$this->rootDir/var/build");
+		}
+	}
+
 	public function testClientWiring(): void
 	{
-		$configurator = new ManualConfigurator(dirname(__DIR__, 2));
-		$configurator->setDebugMode(true);
+		$configurator = new ManualConfigurator($this->rootDir);
+		$configurator->setForceReloadContainer();
 
 		$configurator->addConfig(__DIR__ . '/wiring.neon');
 
@@ -42,8 +56,8 @@ final class HttpClientExtensionTest extends TestCase
 
 	public function testFactoryWiring(): void
 	{
-		$configurator = new ManualConfigurator(dirname(__DIR__, 2));
-		$configurator->setDebugMode(true);
+		$configurator = new ManualConfigurator($this->rootDir);
+		$configurator->setForceReloadContainer();
 
 		$configurator->addConfig(__DIR__ . '/wiring.neon');
 
