@@ -24,7 +24,7 @@
 		"nyholm/psr7": "^1.4.0",
 		"psr/http-client": "^1.0.0",
 		"psr/http-factory": "^1.0.0",
-		"symfony/http-client": "^5.3.0"
+		"symfony/http-client": "^5.3.0|^6.0.0"
 	},
 	"require-dev": {
 		"brianium/paratest": "^6.3.0",
