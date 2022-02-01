@@ -5,7 +5,7 @@
 </h1>
 
 <p align="center">
-     <a href="https://www.php-fig.org/psr/psr-17/">PSR-17</a> and <a href="https://www.php-fig.org/psr/psr-18/">PSR-18</a> HTTP client integration for <a href="https://nette.org">Nette</a> (based on <a href="https://symfony.com/doc/current/http_client.html">symfony/http-client</a>)
+     <a href="https://www.php-fig.org/psr/psr-17/">PSR-17</a> and <a href="https://www.php-fig.org/psr/psr-18/">PSR-18</a> HTTP client integration for <a href="https://nette.org">Nette</a>
 </p>
 
 <p align=center>

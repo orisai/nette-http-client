@@ -1,6 +1,6 @@
 {
 	"name": "orisai/nette-http-client",
-	"description": "PSR-17 and PSR-18 HTTP client integration for Nette (based on symfony/http-client)",
+	"description": "PSR-17 and PSR-18 HTTP client integration for Nette",
 	"keywords": [
 		"client",
 		"http",
