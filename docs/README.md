@@ -22,7 +22,7 @@ Register extension
 
 ```neon
 extensions:
-	httpClient: OriNette\HttpClient\DI\HttpClientExtension
+	orisai.httpClient: OriNette\HttpClient\DI\HttpClientExtension
 ```
 
 ## Usage
@@ -103,7 +103,7 @@ final class ExampleClient
 To show requests and responses in Tracy panel, enable `debug > panel` option.
 
 ```neon
-httpClient:
+orisai.httpClient:
 	debug:
 		panel: %debugMode%
 ```
@@ -111,7 +111,7 @@ httpClient:
 ## TLS
 
 ```neon
-httpClient:
+orisai.httpClient:
 
 	tls:
 		# bool
