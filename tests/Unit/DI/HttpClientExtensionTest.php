@@ -66,29 +66,50 @@ final class HttpClientExtensionTest extends TestCase
 		$factory = $container->getService('httpClient.factory');
 		self::assertInstanceOf(Psr17Factory::class, $factory);
 
-		self::assertInstanceOf(
-			RequestFactoryInterface::class,
-			$container->getByType(RequestFactoryInterface::class),
-		);
-		self::assertInstanceOf(
-			ResponseFactoryInterface::class,
-			$container->getByType(ResponseFactoryInterface::class),
-		);
-		self::assertInstanceOf(
-			ServerRequestFactoryInterface::class,
-			$container->getByType(ServerRequestFactoryInterface::class),
-		);
-		self::assertInstanceOf(
-			StreamFactoryInterface::class,
-			$container->getByType(StreamFactoryInterface::class),
-		);
-		self::assertInstanceOf(
-			UploadedFileFactoryInterface::class,
-			$container->getByType(UploadedFileFactoryInterface::class),
-		);
-		self::assertInstanceOf(
-			UriFactoryInterface::class,
-			$container->getByType(UriFactoryInterface::class),
+		$requestFactory = $container->getByType(RequestFactoryInterface::class);
+		self::assertInstanceOf(RequestFactoryInterface::class, $requestFactory);
+		self::assertSame($requestFactory, $container->getService('httpClient.requestFactory'));
+
+		$responseFactory = $container->getByType(ResponseFactoryInterface::class);
+		self::assertInstanceOf(ResponseFactoryInterface::class, $responseFactory);
+		self::assertSame($factory, $responseFactory);
+
+		$serverRequestFactory = $container->getByType(ServerRequestFactoryInterface::class);
+		self::assertInstanceOf(ServerRequestFactoryInterface::class, $serverRequestFactory);
+		self::assertSame($factory, $serverRequestFactory);
+
+		$streamFactory = $container->getByType(StreamFactoryInterface::class);
+		self::assertInstanceOf(StreamFactoryInterface::class, $streamFactory);
+		self::assertSame($factory, $streamFactory);
+
+		$uploadedFileFactory = $container->getByType(UploadedFileFactoryInterface::class);
+		self::assertInstanceOf(UploadedFileFactoryInterface::class, $uploadedFileFactory);
+		self::assertSame($factory, $uploadedFileFactory);
+
+		$uriFactory = $container->getByType(UriFactoryInterface::class);
+		self::assertInstanceOf(UriFactoryInterface::class, $uriFactory);
+		self::assertSame($factory, $uriFactory);
+	}
+
+	public function testHeaders(): void
+	{
+		$configurator = new ManualConfigurator($this->rootDir);
+		$configurator->setForceReloadContainer();
+
+		$configurator->addConfig(__DIR__ . '/HttpClientExtension.headers.neon');
+
+		$container = $configurator->createContainer();
+
+		$requestFactory = $container->getByType(RequestFactoryInterface::class);
+		$request = $requestFactory->createRequest('GET', 'https://example.com');
+
+		self::assertSame(
+			[
+				'Host' => ['example.com'],
+				'a' => ['b'],
+				'c' => ['d', 'e'],
+			],
+			$request->getHeaders(),
 		);
 	}
 

@@ -9,6 +9,7 @@ for [Nette](https://nette.org)
 - [Usage](#usage)
 - [Tracy](#tracy)
 - [TLS](#tls)
+- [Headers](#headers)
 
 ## Setup
 
@@ -121,4 +122,18 @@ orisai.httpClient:
 		# bool
 		# Default: true
 		verifyHost: true
+```
+
+## Headers
+
+```neon
+orisai.httpClient:
+
+	# Default: []
+	# array<string, string|array<int, string>>
+	headers:
+		name1: value
+		name2:
+			- value1
+			- value2
 ```

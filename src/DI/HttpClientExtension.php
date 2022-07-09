@@ -8,6 +8,7 @@ use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use OriNette\HttpClient\ConfigurableRequestFactory;
 use OriNette\HttpClient\MonitoringHttpClient;
 use OriNette\HttpClient\Tracy\HttpClientPanel;
 use Psr\Http\Client\ClientInterface;
@@ -36,6 +37,13 @@ final class HttpClientExtension extends CompilerExtension
 			'debug' => Expect::structure([
 				'panel' => Expect::bool(false),
 			]),
+			'headers' => Expect::arrayOf(
+				Expect::anyOf(
+					Expect::string(),
+					Expect::arrayOf(Expect::string(), Expect::int()),
+				),
+				Expect::string(),
+			),
 			'tls' => Expect::structure([
 				// verify_host
 				'verifyHost' => Expect::bool(true),
@@ -52,8 +60,19 @@ final class HttpClientExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
 
+		$this->registerRequestFactory($builder, $config);
 		$psr17FactoryDefinition = $this->registerFactory($builder);
-		$this->registerClient($psr17FactoryDefinition, $config, $builder);
+		$this->registerClient($psr17FactoryDefinition, $builder, $config);
+	}
+
+	private function registerRequestFactory(ContainerBuilder $builder, stdClass $config): void
+	{
+		$builder->addDefinition($this->prefix('requestFactory'))
+			->setFactory(ConfigurableRequestFactory::class)
+			->setArguments([
+				$config->headers,
+			])
+			->setAutowired(RequestFactoryInterface::class);
 	}
 
 	private function registerFactory(ContainerBuilder $builder): ServiceDefinition
@@ -61,7 +80,6 @@ final class HttpClientExtension extends CompilerExtension
 		return $builder->addDefinition($this->prefix('factory'))
 			->setFactory(Psr17Factory::class)
 			->setAutowired([
-				RequestFactoryInterface::class,
 				ResponseFactoryInterface::class,
 				ServerRequestFactoryInterface::class,
 				StreamFactoryInterface::class,
@@ -72,8 +90,8 @@ final class HttpClientExtension extends CompilerExtension
 
 	private function registerClient(
 		ServiceDefinition $psr17FactoryDefinition,
-		stdClass $config,
-		ContainerBuilder $builder
+		ContainerBuilder $builder,
+		stdClass $config
 	): void
 	{
 		$symfonyClientDefinition = $builder->addDefinition($this->prefix('symfony.client'))
