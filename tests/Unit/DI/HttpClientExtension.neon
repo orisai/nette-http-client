@@ -1,0 +1,2 @@
+extensions:
+	orisai.httpClient: OriNette\HttpClient\DI\HttpClientExtension

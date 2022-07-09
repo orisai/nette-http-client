@@ -38,20 +38,20 @@ final class HttpClientExtensionTest extends TestCase
 		$configurator = new ManualConfigurator($this->rootDir);
 		$configurator->setForceReloadContainer();
 
-		$configurator->addConfig(__DIR__ . '/wiring.neon');
+		$configurator->addConfig(__DIR__ . '/HttpClientExtension.neon');
 
 		$container = $configurator->createContainer();
 
-		self::assertFalse($container->isCreated('httpClient.factory'));
-		self::assertFalse($container->isCreated('httpClient.symfony.client'));
+		self::assertFalse($container->isCreated('orisai.httpClient.factory'));
+		self::assertFalse($container->isCreated('orisai.httpClient.symfony.client'));
 
 		$client = $container->getByType(ClientInterface::class);
 		self::assertInstanceOf(Psr18Client::class, $client);
-		self::assertSame($client, $container->getService('httpClient.client'));
+		self::assertSame($client, $container->getService('orisai.httpClient.client'));
 
-		self::assertTrue($container->isCreated('httpClient.factory'));
-		self::assertTrue($container->isCreated('httpClient.symfony.client'));
-		self::assertInstanceOf(HttpClientInterface::class, $container->getService('httpClient.symfony.client'));
+		self::assertTrue($container->isCreated('orisai.httpClient.factory'));
+		self::assertTrue($container->isCreated('orisai.httpClient.symfony.client'));
+		self::assertInstanceOf(HttpClientInterface::class, $container->getService('orisai.httpClient.symfony.client'));
 	}
 
 	public function testFactoryWiring(): void
@@ -59,16 +59,16 @@ final class HttpClientExtensionTest extends TestCase
 		$configurator = new ManualConfigurator($this->rootDir);
 		$configurator->setForceReloadContainer();
 
-		$configurator->addConfig(__DIR__ . '/wiring.neon');
+		$configurator->addConfig(__DIR__ . '/HttpClientExtension.neon');
 
 		$container = $configurator->createContainer();
 
-		$factory = $container->getService('httpClient.factory');
+		$factory = $container->getService('orisai.httpClient.factory');
 		self::assertInstanceOf(Psr17Factory::class, $factory);
 
 		$requestFactory = $container->getByType(RequestFactoryInterface::class);
 		self::assertInstanceOf(RequestFactoryInterface::class, $requestFactory);
-		self::assertSame($requestFactory, $container->getService('httpClient.requestFactory'));
+		self::assertSame($requestFactory, $container->getService('orisai.httpClient.requestFactory'));
 
 		$responseFactory = $container->getByType(ResponseFactoryInterface::class);
 		self::assertInstanceOf(ResponseFactoryInterface::class, $responseFactory);
