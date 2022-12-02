@@ -6,6 +6,7 @@
 		"http",
 		"nette",
 		"orisai",
+		"psr",
 		"psr-7",
 		"psr-17",
 		"psr-18"
