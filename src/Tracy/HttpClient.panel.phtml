@@ -1,31 +1,241 @@
 <?php declare(strict_types = 1);
 
 use OriNette\HttpClient\MonitoredRequest;
+use Tracy\Dumper;
 
 /** @var array<MonitoredRequest> $requests */
+
+$reasonPhrases = [
+	100 => 'Continue',
+	101 => 'Switching Protocols',
+	102 => 'Processing',
+	200 => 'OK',
+	201 => 'Created',
+	202 => 'Accepted',
+	203 => 'Non-Authoritative Information',
+	204 => 'No Content',
+	205 => 'Reset Content',
+	206 => 'Partial Content',
+	207 => 'Multi-status',
+	208 => 'Already Reported',
+	226 => 'IM Used',
+	300 => 'Multiple Choices',
+	301 => 'Moved Permanently',
+	302 => 'Found',
+	303 => 'See Other',
+	304 => 'Not Modified',
+	305 => 'Use Proxy',
+	307 => 'Temporary Redirect',
+	308 => 'Permanent Redirect',
+	400 => 'Bad Request',
+	401 => 'Unauthorized',
+	402 => 'Payment Required',
+	403 => 'Forbidden',
+	404 => 'Not Found',
+	405 => 'Method Not Allowed',
+	406 => 'Not Acceptable',
+	407 => 'Proxy Authentication Required',
+	408 => 'Request Time-out',
+	409 => 'Conflict',
+	410 => 'Gone',
+	411 => 'Length Required',
+	412 => 'Precondition Failed',
+	413 => 'Request Entity Too Large',
+	414 => 'Request-URI Too Large',
+	415 => 'Unsupported Media Type',
+	416 => 'Requested range not satisfiable',
+	417 => 'Expectation Failed',
+	421 => 'Misdirected Request',
+	422 => 'Unprocessable Entity',
+	423 => 'Locked',
+	424 => 'Failed Dependency',
+	426 => 'Upgrade Required',
+	428 => 'Precondition Required',
+	429 => 'Too Many Requests',
+	431 => 'Request Header Fields Too Large',
+	451 => 'Unavailable For Legal Reasons',
+	500 => 'Internal Server Error',
+	501 => 'Not Implemented',
+	502 => 'Bad Gateway',
+	503 => 'Service Unavailable',
+	504 => 'Gateway Time-out',
+	505 => 'HTTP Version not supported',
+	506 => 'Variant Also Negotiates',
+	507 => 'Insufficient Storage',
+	508 => 'Loop Detected',
+	510 => 'Not Extended',
+	511 => 'Network Authentication Required',
+];
+
 ?>
 <h1>HTTP requests</h1>
 
-<div class="tracy-inner">
+<style>
+	<?php require __DIR__ . '/assets/style.css'; ?>
+</style>
+<script>
+
+	<?php require __DIR__ . '/assets/script.js'; ?>
+</script>
+
+<style>
+	#orisai-http-client-panel pre code {
+		min-width: 100%;
+		max-width: 500px;
+		white-space: pre-wrap;
+		max-height: 200px;
+		overflow-y: scroll;
+		background: #ffffff;
+	}
+</style>
+<script>
+	document.addEventListener('DOMContentLoaded', (event) => {
+		document.querySelectorAll('#orisai-http-client-panel pre code').forEach((el) => {
+			hljs.highlightElement(el);
+		});
+	});
+</script>
+<div id="orisai-http-client-panel" class="tracy-inner">
 	<table>
+		<thead>
 		<tr>
-			<td>Method</td>
-			<td>Url</td>
-			<td>Options</td>
-			<td>Code</td>
-			<td>Headers</td>
-			<td>Info</td>
+			<th>Request</th>
+			<th>Response</th>
 		</tr>
+		</thead>
+		<tbody>
 		<?php foreach ($requests as $request): ?>
-			<?php $response = $request->getResponse(); ?>
+			<?php
+			$response = $request->getResponse();
+
+			$options = $request->getOptions();
+			$info = $response->getInfo();
+			$httpVersion = 'HTTP/' . (float) ($options['http_version'] ?? $info['http_version']);
+
+			$requestHeaders = $options['headers'];
+			ksort($requestHeaders);
+			$requestBody = htmlspecialchars($options['body'], ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+			$startTime = DateTimeImmutable::createFromFormat('U.u', (string) $info['start_time'])
+				->format('Y-m-d H:i:s.uP');
+
+			$responseCode = $response->getStatusCode();
+			$responseHeaders = $response->getHeaders(false);
+			ksort($responseHeaders);
+			$responseBody = htmlspecialchars($response->getContent(false), ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+			?>
 			<tr>
-				<td><?= $request->getMethod() ?></td>
-				<td><?= $request->getUrl() ?></td>
-				<td><?php dump($request->getOptions()) ?></td>
-				<td><?= $response->getStatusCode() ?></td>
-				<td><?php dump($response->getHeaders(false)) ?></td>
-				<td><?php dump($response->getInfo()) ?></td>
+				<td>
+
+					<?= "$httpVersion {$request->getMethod()} {$request->getUrl()}" ?>
+
+					<br>
+					<?php foreach ($requestHeaders as $name => $value): ?>
+						<?= $name ?>: <?= implode(',', $value) ?>
+						<br>
+					<?php endforeach; ?>
+
+					<br>
+					<?php if ($requestBody !== ''): ?>
+						<pre><code><?= $requestBody ?></code></pre>
+					<?php else: ?>
+						<?= '&ltno body&gt' ?>
+					<?php endif; ?>
+
+					<br><br>
+					Info:
+
+					<br>
+					Canceled: <?= $info['canceled'] ? 'true' : 'false' ?>
+
+					<br>
+					Redirect:
+					<?php if($info['redirect_url'] !== null): ?>
+						&emsp;URL: <?= $info['redirect_url'] ?>
+						&emsp;Count: <?= $info['redirect_count'] ?>
+						&emsp;Time: <?= $info['redirect_time'] ?> μs
+					<?php else: ?>
+						&ltno redirect&gt
+					<?php endif; ?>
+
+					<br>
+					Time:
+					<br>
+					&emsp;Start: <?= $startTime ?>
+					<br>
+					&emsp;App connect time (handshake): <?= $info['appconnect_time_us'] ?> μs
+					<br>
+					&emsp;Connect time: <?= $info['connect_time'] ?> μs
+					<br>
+					&emsp;Name lookup: <?= $info['namelookup_time'] ?> μs
+					<br>
+					&emsp;Pre transfer: <?= $info['pretransfer_time'] ?> μs
+					<br>
+					&emsp;Start transfer: <?= $info['starttransfer_time'] ?> μs
+					<br>
+					&emsp;Total: <?= $info['total_time'] ?> μs
+
+					<br>
+					Upload:
+					<br>
+					&emsp;Speed: <?= $info['speed_upload'] ?> B/s
+					<br>
+					&emsp;Total size: <?= $info['request_size'] ?> B
+					<br>
+					&emsp;Body size: <?= $info['upload_content_length'] ?> B
+
+					<br>
+					Address:
+					<br>
+					&emsp;IP: <?= $info['local_ip'] ?>
+					<br>
+					&emsp;Port: <?= $info['local_port'] ?>
+				</td>
+				<td>
+
+					<?= $responseCode ?> <?= $reasonPhrases[$responseCode] ?? '' ?>
+
+					<br>
+					<?php foreach ($responseHeaders as $name => $value): ?>
+						<?= $name ?>: <?= implode(',', $value) ?>
+						<br>
+					<?php endforeach; ?>
+
+					<br>
+					<?php if ($responseBody !== ''): ?>
+						<pre><code><?= $responseBody ?></code></pre>
+					<?php else: ?>
+						<?= '&ltno body&gt' ?>
+					<?php endif; ?>
+
+					<br><br>
+					Info:
+
+					<br>
+					Download:
+					<br>
+					&emsp;Speed: <?= $info['speed_download'] ?> B/s
+					<br>
+					&emsp;Total size: <?= $info['download_content_length'] + $info['header_size'] ?> B
+					<br>
+					&emsp;Body size: <?= $info['download_content_length'] ?> B
+
+					<br>
+					Address:
+					<br>
+					&emsp;IP: <?= $info['primary_ip'] ?>
+					<br>
+					&emsp;Port: <?= $info['primary_port'] ?>
+
+					<br>
+					SSL:
+					<br>
+					&emsp;Result (non-zero is an error): <?= $info['ssl_verifyresult'] ?>
+					<br>
+					&emsp;Certificate info: <?= Dumper::toHtml($info['certinfo']) ?>
+
+				</td>
 			</tr>
 		<?php endforeach; ?>
+		</tbody>
 	</table>
 </div>
