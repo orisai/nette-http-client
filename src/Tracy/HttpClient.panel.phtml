@@ -79,6 +79,20 @@ $reasonPhrases = [
 </script>
 
 <style>
+	#orisai-http-client-panel table {
+		table-layout: fixed;
+	}
+
+	#orisai-http-client-panel details summary {
+		display: list-item;
+		counter-increment: list-item 0;
+		list-style: inside disclosure-closed;
+	}
+
+	#orisai-http-client-panel details[open] > summary:first-of-type {
+		list-style-type: disclosure-open;
+	}
+
 	#orisai-http-client-panel pre code {
 		min-width: 100%;
 		max-width: 500px;
@@ -116,7 +130,7 @@ $reasonPhrases = [
 			ksort($requestHeaders);
 			$requestBody = htmlspecialchars($options['body'], ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
 			$startTime = DateTimeImmutable::createFromFormat('U.u', (string) $info['start_time'])
-				->format('Y-m-d H:i:s.uP');
+					->format('Y-m-d H:i:s.uP');
 
 			$responseCode = $response->getStatusCode();
 			$responseHeaders = $response->getHeaders(false);
@@ -125,114 +139,116 @@ $reasonPhrases = [
 			?>
 			<tr>
 				<td>
+					<details>
 
-					<?= "$httpVersion {$request->getMethod()} {$request->getUrl()}" ?>
+						<summary>
+							<?= "$httpVersion {$request->getMethod()} {$request->getUrl()}" ?>
+						</summary>
 
-					<br>
-					<?php foreach ($requestHeaders as $name => $value): ?>
-						<?= $name ?>: <?= implode(',', $value) ?>
 						<br>
-					<?php endforeach; ?>
+						<?php foreach ($requestHeaders as $name => $value): ?>
+							<?= $name ?>: <?= implode(',', $value) ?>
+							<br>
+						<?php endforeach; ?>
 
-					<br>
-					<?php if ($requestBody !== ''): ?>
-						<pre><code><?= $requestBody ?></code></pre>
-					<?php else: ?>
-						<?= '&ltno body&gt' ?>
-					<?php endif; ?>
+						<br>
+						<?php if ($requestBody !== ''): ?>
+							<pre><code><?= $requestBody ?></code></pre>
+						<?php else: ?>
+							<?= '&ltno body&gt' ?>
+						<?php endif; ?>
 
-					<br><br>
-					Info:
+						<br><br>
+						Canceled: <?= $info['canceled'] ? 'true' : 'false' ?>
 
-					<br>
-					Canceled: <?= $info['canceled'] ? 'true' : 'false' ?>
+						<br>
+						Redirect:
+						<?php if($info['redirect_url'] !== null): ?>
+							&emsp;URL: <?= $info['redirect_url'] ?>
+							&emsp;Count: <?= $info['redirect_count'] ?>
+							&emsp;Time: <?= $info['redirect_time'] ?> μs
+						<?php else: ?>
+							&ltno redirect&gt
+						<?php endif; ?>
 
-					<br>
-					Redirect:
-					<?php if($info['redirect_url'] !== null): ?>
-						&emsp;URL: <?= $info['redirect_url'] ?>
-						&emsp;Count: <?= $info['redirect_count'] ?>
-						&emsp;Time: <?= $info['redirect_time'] ?> μs
-					<?php else: ?>
-						&ltno redirect&gt
-					<?php endif; ?>
+						<br>
+						Time:
+						<br>
+						&emsp;Start: <?= $startTime ?>
+						<br>
+						&emsp;App connect time (handshake): <?= $info['appconnect_time_us'] ?> μs
+						<br>
+						&emsp;Connect time: <?= $info['connect_time'] ?> μs
+						<br>
+						&emsp;Name lookup: <?= $info['namelookup_time'] ?> μs
+						<br>
+						&emsp;Pre transfer: <?= $info['pretransfer_time'] ?> μs
+						<br>
+						&emsp;Start transfer: <?= $info['starttransfer_time'] ?> μs
+						<br>
+						&emsp;Total: <?= $info['total_time'] ?> μs
 
-					<br>
-					Time:
-					<br>
-					&emsp;Start: <?= $startTime ?>
-					<br>
-					&emsp;App connect time (handshake): <?= $info['appconnect_time_us'] ?> μs
-					<br>
-					&emsp;Connect time: <?= $info['connect_time'] ?> μs
-					<br>
-					&emsp;Name lookup: <?= $info['namelookup_time'] ?> μs
-					<br>
-					&emsp;Pre transfer: <?= $info['pretransfer_time'] ?> μs
-					<br>
-					&emsp;Start transfer: <?= $info['starttransfer_time'] ?> μs
-					<br>
-					&emsp;Total: <?= $info['total_time'] ?> μs
+						<br>
+						Upload:
+						<br>
+						&emsp;Speed: <?= $info['speed_upload'] ?> B/s
+						<br>
+						&emsp;Total size: <?= $info['request_size'] ?> B
+						<br>
+						&emsp;Body size: <?= $info['upload_content_length'] ?> B
 
-					<br>
-					Upload:
-					<br>
-					&emsp;Speed: <?= $info['speed_upload'] ?> B/s
-					<br>
-					&emsp;Total size: <?= $info['request_size'] ?> B
-					<br>
-					&emsp;Body size: <?= $info['upload_content_length'] ?> B
+						<br>
+						Address:
+						<br>
+						&emsp;IP: <?= $info['local_ip'] ?>
+						<br>
+						&emsp;Port: <?= $info['local_port'] ?>
 
-					<br>
-					Address:
-					<br>
-					&emsp;IP: <?= $info['local_ip'] ?>
-					<br>
-					&emsp;Port: <?= $info['local_port'] ?>
+					</details>
 				</td>
 				<td>
+					<details>
+						<summary>
+							<?= $responseCode ?> <?= $reasonPhrases[$responseCode] ?? '' ?>
+						</summary>
 
-					<?= $responseCode ?> <?= $reasonPhrases[$responseCode] ?? '' ?>
-
-					<br>
-					<?php foreach ($responseHeaders as $name => $value): ?>
-						<?= $name ?>: <?= implode(',', $value) ?>
 						<br>
-					<?php endforeach; ?>
+						<?php foreach ($responseHeaders as $name => $value): ?>
+							<?= $name ?>: <?= implode(',', $value) ?>
+							<br>
+						<?php endforeach; ?>
 
-					<br>
-					<?php if ($responseBody !== ''): ?>
-						<pre><code><?= $responseBody ?></code></pre>
-					<?php else: ?>
-						<?= '&ltno body&gt' ?>
-					<?php endif; ?>
+						<br>
+						<?php if ($responseBody !== ''): ?>
+							<pre><code><?= $responseBody ?></code></pre>
+						<?php else: ?>
+							<?= '&ltno body&gt' ?>
+						<?php endif; ?>
 
-					<br><br>
-					Info:
+						<br><br>
+						Download:
+						<br>
+						&emsp;Speed: <?= $info['speed_download'] ?> B/s
+						<br>
+						&emsp;Total size: <?= $info['download_content_length'] + $info['header_size'] ?> B
+						<br>
+						&emsp;Body size: <?= $info['download_content_length'] ?> B
 
-					<br>
-					Download:
-					<br>
-					&emsp;Speed: <?= $info['speed_download'] ?> B/s
-					<br>
-					&emsp;Total size: <?= $info['download_content_length'] + $info['header_size'] ?> B
-					<br>
-					&emsp;Body size: <?= $info['download_content_length'] ?> B
+						<br>
+						Address:
+						<br>
+						&emsp;IP: <?= $info['primary_ip'] ?>
+						<br>
+						&emsp;Port: <?= $info['primary_port'] ?>
 
-					<br>
-					Address:
-					<br>
-					&emsp;IP: <?= $info['primary_ip'] ?>
-					<br>
-					&emsp;Port: <?= $info['primary_port'] ?>
+						<br>
+						SSL:
+						<br>
+						&emsp;Result (non-zero is an error): <?= $info['ssl_verifyresult'] ?>
+						<br>
+						&emsp;Certificate info: <?= Dumper::toHtml($info['certinfo']) ?>
 
-					<br>
-					SSL:
-					<br>
-					&emsp;Result (non-zero is an error): <?= $info['ssl_verifyresult'] ?>
-					<br>
-					&emsp;Certificate info: <?= Dumper::toHtml($info['certinfo']) ?>
-
+					</details>
 				</td>
 			</tr>
 		<?php endforeach; ?>
