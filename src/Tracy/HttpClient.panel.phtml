@@ -162,16 +162,6 @@ $reasonPhrases = [
 						Canceled: <?= $info['canceled'] ? 'true' : 'false' ?>
 
 						<br>
-						Redirect:
-						<?php if($info['redirect_url'] !== null): ?>
-							&emsp;URL: <?= $info['redirect_url'] ?>
-							&emsp;Count: <?= $info['redirect_count'] ?>
-							&emsp;Time: <?= $info['redirect_time'] ?> μs
-						<?php else: ?>
-							&ltno redirect&gt
-						<?php endif; ?>
-
-						<br>
 						Time:
 						<br>
 						&emsp;Start: <?= $startTime ?>
@@ -240,6 +230,16 @@ $reasonPhrases = [
 						&emsp;IP: <?= $info['primary_ip'] ?>
 						<br>
 						&emsp;Port: <?= $info['primary_port'] ?>
+
+						<br>
+						Redirect:
+						<?php if($info['redirect_url'] !== null): ?>
+							&emsp;URL: <?= $info['redirect_url'] ?>
+							&emsp;Count: <?= $info['redirect_count'] ?>
+							&emsp;Time: <?= $info['redirect_time'] ?> μs
+						<?php else: ?>
+							&ltno redirect&gt
+						<?php endif; ?>
 
 						<br>
 						SSL:
