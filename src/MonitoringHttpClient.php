@@ -8,6 +8,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
+/**
+ * @internal
+ */
 final class MonitoringHttpClient implements HttpClientInterface, ResetInterface
 {
 

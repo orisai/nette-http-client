@@ -4,6 +4,9 @@ namespace OriNette\HttpClient;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * @internal
+ */
 final class MonitoredRequest
 {
 
