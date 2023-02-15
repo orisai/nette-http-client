@@ -1,0 +1,31 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\RequestFactoryInterface' and Psr\\\\Http\\\\Message\\\\RequestFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\ResponseFactoryInterface' and Psr\\\\Http\\\\Message\\\\ResponseFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\ServerRequestFactoryInterface' and Psr\\\\Http\\\\Message\\\\ServerRequestFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\StreamFactoryInterface' and Psr\\\\Http\\\\Message\\\\StreamFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\UploadedFileFactoryInterface' and Psr\\\\Http\\\\Message\\\\UploadedFileFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message\\\\\\\\UriFactoryInterface' and Psr\\\\Http\\\\Message\\\\UriFactoryInterface will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/DI/HttpClientExtensionTest.php
