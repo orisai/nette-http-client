@@ -20,8 +20,6 @@ final class MonitoringHttpClient implements HttpClientInterface, ResetInterface
 	private array $monitoredRequests = [];
 
 	/**
-	 * {@inheritdoc}
-	 *
 	 * @param array<mixed> $options
 	 */
 	public function request(string $method, string $url, array $options = []): ResponseInterface
