@@ -4,6 +4,18 @@
 	Nette HTTP client
 </h1>
 
+<h2>ABANDONED</h2>
+
+<p>
+     Over time I found the PSR HTTP client really annoying to work with.
+     Lot of interfaces where one would be enough. Lot of boilerplate.
+     No way of configuring transport and certificates for various services which do not
+     work well with default config. Just use symfony/http-client directly.
+     I will eventually add http debug panel to Tracy which will work universally.
+</p>
+
+##
+
 <p align="center">
      <a href="https://www.php-fig.org/psr/psr-17/">PSR-17</a> and <a href="https://www.php-fig.org/psr/psr-18/">PSR-18</a> HTTP client integration for <a href="https://nette.org">Nette</a>
 </p>
